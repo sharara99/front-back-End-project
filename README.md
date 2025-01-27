@@ -78,7 +78,7 @@ or open http://localhost:8080/ in a web browser.
 3- Run the container:
 
    ```bash
-      docker run -d -p 8080:80 frontend:latest
+      docker run -d -p 3000:3000 backend:latest
    ```
 
 4- Test the frontend:
@@ -94,7 +94,7 @@ or open http://localhost:3000/api in a web browser.
 Before pushing images, log in to Docker Hub:
 
 ```bash
-   Docker login
+   docker login
 ```
 
 #### Frontend
