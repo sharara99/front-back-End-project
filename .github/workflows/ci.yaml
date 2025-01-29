@@ -16,7 +16,7 @@ jobs:
       - name: Validate Secrets
         run: |
           echo "region: ${{ vars.AWS_REGION }}"
-          echo "region: ${{ vars.FRONTEND_ECR_REPO }}"
-          echo "region: ${{ vars.BACKEND_ECR_REPO }}"
-          echo "region: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "region: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "frontEnd: ${{ vars.FRONTEND_ECR_REPO }}"
+          echo "BackEnd: ${{ vars.BACKEND_ECR_REPO }}"
+          echo "Access Key ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "Access Key ID: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
