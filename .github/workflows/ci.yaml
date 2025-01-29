@@ -62,7 +62,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           BACKEND_ECR_REPO: ${{ vars.BACKEND_ECR_REPO }}
         with:
-          context: ./Backend
+          context: ./BackEnd
           push: true
           tags: |
             ${{ env.ECR_REGISTRY }}/${{ env.BACKEND_ECR_REPO }}:latest
