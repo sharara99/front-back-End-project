@@ -1,4 +1,8 @@
 name: CI Pipeline
+env:
+  DEFAULT_REGION: us-east-1
+  FRONTEND_ECR_REPO: frontend-app
+  BACKEND_ECR_REPO: backend-app
 
 on:
   push:
@@ -15,7 +19,7 @@ jobs:
         uses: actions/checkout@v4.1.1
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,14 +27,26 @@ jobs:
 
       - name: Create Frontend ECR Repository
         run: |
-          aws ecr describe-repositories --repository-names ${{ env.FRONTEND_ECR_REPO }} || \
-          aws ecr create-repository --repository-name ${{ env.FRONTEND_ECR_REPO }}
+          aws ecr describe-repositories --repository-names ${{ env.FRONTEND_ECR_REPO }} --region ${{ vars.AWS_REGION || env.DEFAULT_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.FRONTEND_ECR_REPO }} --region ${{ vars.AWS_REGION || env.DEFAULT_REGION }}
 
       - name: Create Backend ECR Repository
         run: |
-          aws ecr describe-repositories --repository-names ${{ env.BACKEND_ECR_REPO }} || \
-          aws ecr create-repository --repository-name ${{ env.BACKEND_ECR_REPO }}
+          aws ecr describe-repositories --repository-names ${{ env.BACKEND_ECR_REPO }} --region ${{ vars.AWS_REGION || env.DEFAULT_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.BACKEND_ECR_REPO }} --region ${{ vars.AWS_REGION || env.DEFAULT_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry: ${{ vars.AWS_REGION || env.DEFAULT_REGION }}
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build \
+            -t ${{ steps.login-ecr.outputs.registry }}/${{ env.FRONTEND_ECR_REPO }}:latest \
+            ./FrontEnd
+
+      - name: Push Frontend Image to ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.FRONTEND_ECR_REPO }}:latest
