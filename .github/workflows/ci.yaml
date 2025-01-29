@@ -1,0 +1,36 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  setup-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Create Frontend ECR Repository
+        run: |
+          aws ecr describe-repositories --repository-names ${{ env.FRONTEND_ECR_REPO }} || \
+          aws ecr create-repository --repository-name ${{ env.FRONTEND_ECR_REPO }}
+
+      - name: Create Backend ECR Repository
+        run: |
+          aws ecr describe-repositories --repository-names ${{ env.BACKEND_ECR_REPO }} || \
+          aws ecr create-repository --repository-name ${{ env.BACKEND_ECR_REPO }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
