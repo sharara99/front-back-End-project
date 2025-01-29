@@ -1,10 +1,4 @@
 name: CI Pipeline
-env:
-  DEFAULT_REGION: us-east-1
-  FRONTEND_ECR_REPO: frontend-app
-  BACKEND_ECR_REPO: backend-app
-  AWS_REGION: us-east-1  # Explicitly define AWS_REGION
-
 on:
   push:
     branches: [master]
