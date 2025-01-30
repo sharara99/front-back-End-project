@@ -64,7 +64,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build and push FrontEnd image
-        if: steps.frontend-changes.outputs.has_changes != '0'
+        if: needs.check-changes.outputs.frontend_changed == 'true'
         uses: docker/build-push-action@v6.13.0
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -78,7 +78,7 @@ jobs:
             ${{ env.ECR_REGISTRY }}/${{ env.FRONTEND_ECR_REPO }}:${{ env.IMAGE_TAG }}
 
       - name: Build and push BackEnd image
-        if: steps.backend-changes.outputs.has_changes != '0'
+        if: needs.check-changes.outputs.backend_changed == 'true'
         uses: docker/build-push-action@v6.13.0
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
