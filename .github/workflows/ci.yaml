@@ -2,14 +2,8 @@ name: CI Pipeline
 on:
   push:
     branches: [master]
-    paths:
-      - "FrontEnd/**"
-      - "BackEnd/**"
   pull_request:
     branches: [master]
-    paths:
-      - "FrontEnd/**"
-      - "BackEnd/**"
 
 jobs:
   check-changes:
