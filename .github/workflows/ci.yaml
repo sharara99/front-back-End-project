@@ -12,24 +12,33 @@ on:
       - "BackEnd/**"
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_changed: ${{ steps.frontend-changes.outputs.any_changed }}
+      backend_changed: ${{ steps.backend-changes.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for Frontend changes
+        id: frontend-changes
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            FrontEnd/**
+
+      - name: Check for Backend changes
+        id: backend-changes
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            BackEnd/**
   setup-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.1.1
-
-      - name: Check for Frontend changes
-        id: frontend-changes
-        run: |
-          echo "Frontend changes detected: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'FrontEnd/' | wc -l)"
-          echo "has_changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'FrontEnd/' | wc -l)" >> $GITHUB_OUTPUT
-
-      - name: Check for Backend changes
-        id: backend-changes
-        run: |
-          echo "Backend changes detected: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'BackEnd/' | wc -l)"
-          echo "has_changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'BackEnd/' | wc -l)" >> $GITHUB_OUTPUT
 
       - name: "Configure AWS Credentials"
         uses: aws-actions/configure-aws-credentials@v4
