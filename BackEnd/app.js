@@ -1,9 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
-app.get('/api', (req, res) => {
-    res.json({ message: 'Hello from the backend API!' });
+app.use(cors());
+
+let counter = 0;
+
+app.get('/api/increment', (req, res) => {
+    counter++;
+    res.json({ counter });
 });
 
 app.listen(port, () => {
