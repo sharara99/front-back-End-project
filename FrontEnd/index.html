@@ -4,11 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple 3-Tier App</title>
+    <script>
+        async function updateCounter() {
+            try {
+                const response = await fetch("http://backend-service:3000/api/increment");
+                const data = await response.json();
+                document.getElementById("counter").innerText = "Counter: " + data.counter;
+            } catch (error) {
+                console.error("Error fetching counter:", error);
+            }
+        }
+
+        window.onload = updateCounter;
+    </script>
 </head>
 <body>
-<center>
-    <h1>Welcome to the Simple 3-Tier Web Application</h1>
-    <p>My Name Is Seif Hendawy, I am A DevOps Enginer.</p>
-</center>
+    <center>
+        <h1>Welcome to the Simple 3-Tier Web Application</h1>
+        <p>My Name Is Seif Hendawy, I am A DevOps Engineer.</p>
+        <p id="counter">Counter: 0</p>
+        <button onclick="updateCounter()">Increase Counter</button>
+    </center>
 </body>
 </html>
