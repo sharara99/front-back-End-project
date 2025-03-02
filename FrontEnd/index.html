@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <script>
         async function updateCounter() {
             try {
-                const response = await fetch("http://backend-service:3000/api/increment");
+                const response = await fetch("http://localhost:3000/api/increment");
                 const data = await response.json();
                 document.getElementById("counter").innerText = "Counter: " + data.counter;
             } catch (error) {
@@ -18,6 +19,7 @@
         window.onload = updateCounter;
     </script>
 </head>
+
 <body>
     <center>
         <h1>Welcome to the Simple 3-Tier Web Application</h1>
@@ -26,4 +28,5 @@
         <button onclick="updateCounter()">Increment</button>
     </center>
 </body>
+
 </html>
