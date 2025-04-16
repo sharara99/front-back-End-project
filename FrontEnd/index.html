@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple 3-Tier App</title>
     <script>
+        const backendUrl = "/api/increment";
         async function updateCounter() {
             try {
-                const response = await fetch("http://localhost:3000/api/increment");
+                const response = await fetch(backendUrl);
                 const data = await response.json();
                 document.getElementById("counter").innerText = "Counter: " + data.counter;
             } catch (error) {

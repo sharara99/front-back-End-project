@@ -6,7 +6,7 @@ const port = 3000;
 
 app.use(
   cors({
-    origin: "*", // Change this to your frontend URL for security
+    origin: "*",
     methods: ["GET", "POST"],
   })
 );
@@ -18,6 +18,6 @@ app.get("/api/increment", (req, res) => {
   res.json({ counter });
 });
 
-app.listen(port, () => {
-  console.log(`Backend API listening at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Backend API listening at http://0.0.0.0:${port}`);
 });
