@@ -1,166 +1,115 @@
-# Simple 3-Tier Web Application
+# 📖 Simple 3-Tier Web Application
 
-This project is a simple 3-tier web application with a static frontend and a Node.js backend. The frontend, and the backend built with Express.js.
+This project is a simple 3-tier web application with a static frontend and a Node.js backend. The frontend is served by Nginx, while the backend is built with Express.js.
 
-## Project Structure
-
-- **Frontend**: Static HTML served by Nginx.
-- **Backend**: Node.js RESTful API using Express.js.
-- **Dockerizing The App**: Docker Files To Build Images for The FrontEnd and The BackEnd.
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js and npm installed on your machine.
-
-### Running the Backend
-
-1. Navigate to the `backend` directory.
-2. Install dependencies:
-
-   ```bash
-      npm install
-   ```
-
-3. Start the backend server:
-
-   ```bash
-      npm start
-   ```
-
-## Dockerizing The Application
-
-### Building and Running Containers Locally
-
-#### Frontend
-
-1- Navigate to the Frontend directory:
-
-   ```bash
-      cd Frontend
-   ```
-
-2- Build the Docker image:
-
-   ```bash
-      docker build -t frontend:latest .
-   ```
-
-3- Run the container:
-
-   ```bash
-      docker run -d -p 8080:80 frontend:latest
-   ```
-
-4- Test the frontend:
-
-   ```bash
-      curl http://localhost:8080
-   ```
-
-or open http://localhost:8080/ in a web browser.
-
-#### Backend
-
-1- Navigate to the Frontend directory:
-
-   ```bash
-      cd ../Backend
-   ```
-
-2- Build the Docker image:
-
-   ```bash
-      docker build -t backend:latest .
-   ```
-
-3- Run the container:
-
-   ```bash
-      docker run -d -p 3000:3000 backend:latest
-   ```
-
-4- Test the frontend:
-
-   ```bash
-      curl http://localhost:3000/api
-   ```
-
-or open http://localhost:3000/api in a web browser.
-
-### Pushing Images to Docker Hub
-
-Before pushing images, log in to Docker Hub:
-
-```bash
-   docker login
+## 📂 Project Structure
+```
+simple-3-tier-app/
+├── Backend/         # Node.js (Express) API
+├── FrontEnd/        # Static HTML served by Nginx
+├── K8sManifests/    # Kubernetes deployment & service manifests
+├── docker-compose.yml
+└── README.md
 ```
 
-#### Frontend
+## 🚀 Features
 
-1- Build and tag the image:
+   - Frontend: Static HTML served via Nginx.
+   - Backend: Node.js RESTful API using Express.js.
+   - Dockerized: Separate Dockerfiles for both services.
+   - Kubernetes Deployment: EKS-ready manifests for Managed Node Groups and Self-Managed Node Groups.
+   - Dual Service Support:
+        - ClusterIP service for internal cluster communication.
+        - NodePort service variant for external testing while keeping frontend secure via LoadBalancer.
 
-   ```bash
-      docker build -t hendawyy/frontend:latest .
-   ```
+## 📝 Latest Updates
+###  📌 Kubernetes Enhancements
 
-2- Push the image to Docker Hub:
+- New Namespace: 3-tier-eks for testing ClusterIP backend accessibility.
+- Backend Service ClusterIP in 3-tier-app-eks namespace with Nginx Ingress Controller
 
-   ```bash
-      docker push hendawyy/frontend:latest
-   ```
+## 🛠 Getting Started
+### 📦 Prerequisites
 
-#### Backend
+- Docker installed.
+- Node.js and npm installed.
+- kubectl and AWS CLI configured (if deploying on EKS)
 
-1- Build and tag the image:
+### 📌 Running the Backend Locally
+```
+cd Backend
+npm install
+npm start
+```
+## 🐳 Dockerizing The Application
+### 📦 Frontend
+```
+cd FrontEnd
+docker build -t frontend:latest .
+docker run -d -p 8080:80 frontend:latest
+```
+### Test:
+```
+curl http://localhost:8080
+```
+or open http://localhost:8080/
 
-   ```bash
-   docker build -t hendawyy/backend:latest .
-   ```
+### 📦 Backend
+```
+cd Backend
+docker build -t backend:latest .
+docker run -d -p 3000:3000 backend:latest
+```
+### Test:
+```
+curl http://localhost:3000/api/increment
+```
+or open http://localhost:3000/api/increment
 
-2- Push the image to Docker Hub:
+## 📤 Pushing Images to Docker Hub
+### Frontend
+```
+docker build -t hendawyy/frontend:latest .
+docker push hendawyy/frontend:latest
+```
+### Backend
+```
+docker build -t hendawyy/backend:latest .
+docker push hendawyy/backend:latest
+```
+## 📥 Pulling and Running from Docker Hub
+### Frontend
+```
+docker pull hendawyy/frontend:latest
+docker run -d -p 8080:80 hendawyy/frontend:latest
+```
+Access: http://localhost:8080/
+### Backend
+```
+docker pull hendawyy/backend:latest
+docker run -d -p 3000:3000 hendawyy/backend:latest
+```
+Access: http://localhost:3000/api
+## 🌐 Kubernetes Deployment
 
-   ```bash
-   docker push hendawyy/backend:latest
-   ```
+- K8s manifests available in K8sManifests/ for:
 
-### Pulling and Running Images from Docker Hub
+    - Deployments
 
-#### Frontend
+    - ClusterIP and Ingress services
 
-1- Pull the image:
+### Deploy using:
+```
+kubectl apply -f K8sManifests/
+```
+### Check services:
+```
+kubectl get svc -A
+```
+## 📊 Summary
 
-   ```bash
-   docker pull hendawyy/frontend:latest
-   ```
+- Dockerized and deployed a 3-tier web app.
 
-2- Run the container:
+- Added Kubernetes manifests for both Managed and Self-Managed EKS node groups.
 
-   ```bash
-   docker run -d -p 8080:80 hendawyy/frontend:latest
-   ```
-
-3- Access the frontend at:
-
-http://localhost:8080/
-
-#### Backend
-
-1- Pull the image:
-
-   ```bash
-   docker pull hendawyy/backend:latest
-   ```
-
-2- Run the container:
-
-   ```bash
-   docker run -d -p 3000:3000 hendawyy/backend:latest
-   ```
-
-3- Access the backend at:
-
-http://localhost:3000/api
-
-By following these steps, you can successfully containerize and deploy your 3-tier web application using Docker. 🚀
+- Implemented a Nginx Ingress Controller service and a LoadBalancer and ClusterIP for Both FrontEnd & Backend for backend testing.
